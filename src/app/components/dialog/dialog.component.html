@@ -1,0 +1,68 @@
+<h2 mat-dialog-title>Add new recipe:</h2>
+
+<div class="mat-dialog-content">
+  <form [formGroup]="recipeForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Dish name</mat-label>
+      <input formControlName="recipeName" matInput placeholder="Dish name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Kind of dish</mat-label>
+      <input formControlName="recipeType" matInput placeholder="Kind of dish">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Calories</mat-label>
+      <input formControlName="recipeCalories" matInput placeholder="Calories">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Ingredients</mat-label>
+      <textarea formControlName="recipeIngredients" matInput placeholder="Ingredients"></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Preparation</mat-label>
+      <textarea formControlName="recipePreparation" matInput placeholder="Preparation"></textarea>
+    </mat-form-field>
+
+    <div class="container">
+      <div class="card">
+        <div class="card-header">
+          Upload image
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Select a file for upload</h5>
+          <input type="file" id="file-upload" (change)="upload($event)" accept="image/*">
+        </div>
+      </div>
+    </div>
+    <br />
+    <mat-form-field class="example-chip-list" appearance="fill">
+      <mat-label>Dish tags</mat-label>
+      <mat-chip-list #chipList aria-label="Dish selection" formControlName="recipeTags">
+        <mat-chip *ngFor="let tag of tags.value" (removed)="remove(tag)">
+          {{ tag }}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+        <input placeholder="Add new tag"
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               [matChipInputAddOnBlur]="addOnBlur"
+               (matChipInputTokenEnd)="add($event)">
+      </mat-chip-list>
+    </mat-form-field>
+
+  </form>
+</div>
+
+<div>
+  <div mat-dialog-action [align]="'end'">
+    <button mat-raised-button color="warm" mat-dialog-close>Close</button>
+    <button [disabled]="recipeForm.invalid" style="margin-left: 10px;"
+        mat-raised-button color="primary" mat-dialog-close (click)="addRecipe()">{{ btnCurrentValue }}</button>
+  </div>
+</div>

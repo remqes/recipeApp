@@ -1,0 +1,82 @@
+<div class="header-start-section">
+  <div class="header-section">
+    <div class="header-headline">
+      <h1 class="mat-h1">Recipe App</h1>
+      <h2 class="mat-h2" *ngIf="(afAuth.authState | async)">List of recipes created by {{ uidname }}</h2>
+      <h2 class="mat-h2" *ngIf="(afAuth.authState | async) === null">You're not logged</h2>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="(afAuth.authState | async) && recipeNotFound === false">
+  <div class="filter-search" *ngIf="(afAuth.authState | async) && recipeNotFound === false">
+    <mat-card style="background-color: #f44336; color: white; padding-right: 40px; padding-left: 40px;">Search</mat-card>
+  </div>
+
+  <div class="filter-fx" style="margin-bottom: 50px;">
+    <mat-form-field style="margin-left: 40px;" appearance="standard">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="What are you looking for?" #input>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="recipeNotFound === false">
+    <mat-card *ngFor="let data of observable | async" class="example-card">
+      <mat-card-header>
+        <mat-card-title>{{ data.recipeName }}</mat-card-title>
+      </mat-card-header>
+      <img class="recipe-image-section" mat-card-image [src]="data.recipeImage" alt="Recipe image">
+      <mat-card-content>
+        <h1 style="margin-top: 20px;">Recipe details:</h1>
+        <div style="font-size: 16px;">
+
+          <div class="mat-list-fix">
+            <p><b>Recipe Type</b>: {{ data.recipeType }}</p>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="mat-list-fix">
+            <p><b>Calories</b>: {{ data.recipeCalories }}</p>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="mat-list-fix">
+            <p><b>Ingredients</b>: {{ data.recipeIngredients }}</p>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="mat-list-fix">
+            <p><b>Preparation</b>: {{ data.recipePreparation }}</p>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="postedby-heading">
+            <div style="margin-top: 5px;"><b>Added by</b>: </div>
+            <div style="margin-left: 10px; margin-top: 5px;"><p>{{ data.userName }}</p></div>
+          </div>
+
+        </div>
+      </mat-card-content>
+      <div *ngIf="(afAuth.authState | async)">
+        <button style="margin-right: 10px;" mat-raised-button (click)="editRecipe(data)" color="primary">Edit</button>
+        <button style="margin-right: 10px;" mat-raised-button (click)="deleteRecipe(data.id)" color="warn">Delete</button>
+
+      </div>
+    </mat-card>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]">
+    </mat-paginator>
+  </div>
+</div>
+
+<div *ngIf="(afAuth.authState | async) && recipeNotFound">
+  <mat-card style="text-align: center; font-size: 20px; font-weight: 400; margin-bottom: 100px;">
+    No recipe was added
+  </mat-card>
+</div>
+
+<div *ngIf="(afAuth.authState | async) === null">
+  <mat-card style="text-align: center; font-size: 20px; font-weight: 400; margin-bottom: 100px;">
+    You're not logged
+  </mat-card>
+</div>

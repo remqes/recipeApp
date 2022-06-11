@@ -1,0 +1,29 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- side bar display dependencies -->
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+                [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+                [mode]="(isHandset$ | async) ? 'over' : 'side'"
+                [opened]="(isHandset$ | async) === false">
+    <mat-toolbar>Navigation</mat-toolbar>
+    <mat-nav-list><!-- side bar -->
+      <a mat-list-item routerLink="/dashboard" [routerLinkActive]="['is-active']">Home</a>
+      <a mat-list-item routerLink="/myrecipes" [routerLinkActive]="['is-active']">Added recipes</a>
+      <a mat-list-item routerLink="/about" [routerLinkActive]="['is-active']">About</a>
+      <a mat-list-item routerLink="/signin" [routerLinkActive]="['is-active']">Sign In</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content> <!-- button display when screen width is low -->
+    <mat-toolbar class="mat-elevation-z10 topo" color="warn">
+      <button type="button" aria-label="Sidenav" mat-icon-button
+              (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Sidenav button's icon ">menu</mat-icon>
+      </button>
+      <span class="full-text">RecipeApp</span>
+      <span class="example-spacer"></span>
+      <button mat-raised-button color="warn" (click)="openDialog()">Add new recipe</button> <!--if null, user is not logged in -->
+      <button style="margin-left: 10px;" mat-raised-button color="accent" *ngIf="(afAuth.authState | async) === null" (click)="signIn()">Sign In</button>
+      <button style="margin-left: 10px;" mat-raised-button color="basic" *ngIf="(afAuth.authState | async)" (click)="signOut()">Sign Out</button>
+    </mat-toolbar>
+    <router-outlet></router-outlet> <!-- this component display context of page -->
+  </mat-sidenav-content>
+</mat-sidenav-container>
